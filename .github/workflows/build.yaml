@@ -68,10 +68,9 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
 
-      - uses: cargo-bins/cargo-binstall@main
-
-      - run: cargo binstall toml-cli -y && echo "PACKAGE_VERSION=$(toml get ./Cargo.toml package.version --raw)" >> $GITHUB_ENV
-      
+      - run: echo "PACKAGE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
+        shell: sh
+     
       - name: Package Artifacts
         shell: bash
         run: |
