@@ -54,7 +54,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install ${{ matrix.linker }}
-          cat .cargo/config.github >> .cargo/config
+          cat .cargo/config.github.toml >> .cargo/config.toml
 
       - name: Build
         run: cargo build --verbose  --release --target ${{ matrix.target }}
