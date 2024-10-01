@@ -83,12 +83,19 @@ jobs:
           
           cp target/${{ matrix.target }}/release/spotify-player-quickauth $stage/
           cd $stage
+
           RELEASE_VERSION=v${{ steps.get_version.outputs.result }}
-          ASSET_NAME="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
-          ASSET_PATH="$src/$ASSET_NAME"
+          ARCHIVE="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
+          tar czf "$ARCHIVE" ./spotify-player-quickauth
           echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
-          tar czf $ASSET_PATH *
-          cd $src
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ env.ASSET_PATH }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
 
       # Publish flow
       # - name: cargo login
