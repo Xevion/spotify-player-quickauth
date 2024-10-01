@@ -61,6 +61,11 @@ jobs:
 
       - name: Run tests
         run: cargo test --verbose
+
+      - id: get_version
+        uses: mikefarah/yq@v4.44.3
+        with:
+          cmd: yq '.package.version' Cargo.toml
       
       - name: Package Artifacts
         shell: bash
@@ -78,7 +83,7 @@ jobs:
           
           cp target/${{ matrix.target }}/release/spotify-player-quickauth $stage/
           cd $stage
-          RELEASE_VERSION=${GITHUB_REF#refs/tags/}
+          RELEASE_VERSION=v${{ steps.get_version.outputs.result }}
           ASSET_NAME="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
           ASSET_PATH="$src/$ASSET_NAME"
           echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
