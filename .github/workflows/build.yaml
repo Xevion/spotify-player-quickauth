@@ -43,6 +43,7 @@ jobs:
           #   target: i686-pc-windows-msvc
 
     runs-on: ${{ matrix.os }}
+    name: release-${{ matrix.target }}
 
     steps:
       - uses: actions/checkout@v4
