@@ -93,13 +93,13 @@ jobs:
           RELEASE_VERSION=v${{ env.PACKAGE_VERSION }}
           ARCHIVE="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}.tar.gz"
           tar czf "$ARCHIVE" ./spotify-player-quickauth
-          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+          echo "ARCHIVE_PATH=$(pwd)/$ARCHIVE" >> $GITHUB_ENV
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ${{ env.ASSET_PATH }}
+          files: ${{ env.ARCHIVE_PATH }}
           generate_release_notes: true
           fail_on_unmatched_files: true
 
