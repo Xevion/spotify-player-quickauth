@@ -57,6 +57,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install ${{ matrix.linker }}
+          # ensure has a newline at the end
+          [ "$(tail -c 1 .cargo/config.toml)" != "" ] && echo >> .cargo/config.toml
           cat .cargo/config.github.toml >> .cargo/config.toml
 
       - name: Build
