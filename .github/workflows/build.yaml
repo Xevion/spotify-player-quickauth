@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - LICENSE
+      - run.sh
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - LICENSE
+      - run.sh
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: cargo build --verbose --release
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      # Publish flow
+      # - name: cargo login
+      #   run: cargo login ${{ secrets.CRATES_IO_API_TOKEN }}
+      
+      # - name: "cargo release publish"
+      #   run: cargo release publish --workspace --all-features --allow-branch HEAD --no-confirm --no-verify --execute
