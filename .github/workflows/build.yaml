@@ -99,8 +99,8 @@ jobs:
           RELEASE_VERSION=v${{ env.PACKAGE_VERSION }}
           ARCHIVE="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}"
           
-            if [[ "$RUNNER_OS" == "Windows" ]]; then
-            ARCHIVE="$ARCHIVE.tar.gz"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            ARCHIVE="$ARCHIVE.zip"
             cp target/${{ matrix.target }}/release/spotify-player-quickauth.exe ./
             tar czf "$ARCHIVE" ./spotify-player-quickauth.exe
           else
@@ -110,6 +110,13 @@ jobs:
           fi
 
           echo "ARCHIVE_PATH=$(pwd)/$ARCHIVE" >> $GITHUB_ENV
+
+      - name: Verify Archive
+        run: |
+          if [ ! -f "${{ env.ARCHIVE_PATH }}" ]; then
+            echo "Error: Archive file not found!"
+            exit 1
+          fi
 
       - name: Release
         uses: softprops/action-gh-release@v2
