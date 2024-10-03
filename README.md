@@ -4,7 +4,7 @@ A simple CLI-based application for creating a `credentials.json` file, used by t
 
 ## Usage
 
-You can install this applicaiton, but most people will just need it once.
+You can install this application, but most people will just need it once. The following commands will run the application without installing it.
 
 For Linux and macOS, you can paste this command into your terminal:
 

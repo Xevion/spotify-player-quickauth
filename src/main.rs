@@ -1,82 +1,74 @@
-use std::env;
-use std::process::Command;
+use std::{env, fs::File, process::exit};
 
-fn main() {
-    let os = env::consts::OS;
-    let arch = env::consts::ARCH;
-    let username = if os == "windows" {
-        env::var("USERNAME").unwrap_or_else(|_| "unknown".to_string())
-    } else {
-        env::var("USER").unwrap_or_else(|_| "unknown".to_string())
+use futures::StreamExt;
+use librespot_core::config::DeviceType;
+use librespot_discovery::Discovery;
+use log::{info, warn};
+use sha1::{Digest, Sha1};
+use librespot_core::SessionConfig;
+use std::io::Write;
+
+#[tokio::main(flavor = "current_thread")]
+async fn main() {   
+    if env::var("RUST_LOG").is_err() {
+        env::set_var("RUST_LOG", "info")
+    }
+    env_logger::builder().init();
+
+    let credentials_file = match home::home_dir() {
+        // ~/.cache/spotify_player/credentials.json
+        Some(path) => path.join(".cache/spotify_player/credentials.json"),
+        None => {
+            warn!("Cannot determine home directory for credentials file.");
+            exit(1);
+        }
     };
-    let hostname = Command::new("hostname")
-        .output()
-        .map(|output| String::from_utf8_lossy(&output.stdout).trim().to_string())
-        .unwrap_or_else(|_| "unknown".to_string());
-    let execution_path = env::current_exe()
-        .map(|path| path.display().to_string())
-        .unwrap_or_else(|_| "unknown".to_string());
-    let working_directory = env::current_dir()
-        .map(|path| path.display().to_string())
-        .unwrap_or_else(|_| "unknown".to_string());
+    info!("Credentials file: {}", &credentials_file.display());
 
-    println!(
-        "{}@{} ({}/{}) [{}] [{}]",
-        username, hostname, os, arch, working_directory, execution_path
-    );
-}
-
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_os_arch() {
-        let os = env::consts::OS;
-        let arch = env::consts::ARCH;
-        
-        // Make sure that OS and ARCH are not empty
-        assert!(!os.is_empty());
-        assert!(!arch.is_empty());
+    // TODO: If credentials file exists, confirm overwrite
+    if credentials_file.exists() {
+        warn!("Credentials file already exists: {}", &credentials_file.display());
+        exit(1);
     }
 
-    #[test]
-    fn test_username() {
-        let username = env::var("USER").unwrap_or_else(|_| "unknown".to_string());
-        
-        // In CI environments, USER might not be set, so allow "unknown"
-        assert!(!username.is_empty());
+    // TODO: If spotifyd is running, ask if shutdown is desired
+    
+    let username = match env::consts::OS {
+        "windows" => env::var("USERNAME"),
+        _ => env::var("USER"),
+    }.unwrap_or_else(|_| "unknown".to_string());
+
+    let device_name = format!("spotify-quickauth-{}", username);
+    let device_id = hex::encode(Sha1::digest(device_name.as_bytes()));
+    let device_type = DeviceType::Computer;
+
+    let mut server = Discovery::builder(device_id, SessionConfig::default().client_id)
+        .name(device_name.clone())
+        .device_type(device_type)
+        .launch()
+        .unwrap();
+
+    println!("Open Spotify and select output device: {}", device_name);
+
+    let mut written = false;
+    while let Some(credentials) = server.next().await {
+        let result = File::create(&credentials_file).and_then(|mut file| {
+            let data = serde_json::to_string(&credentials)?;
+            write!(file, "{data}")
+        });
+        written = true;
+
+        if let Err(e) = result {
+            warn!("Cannot save credentials to cache: {}", e);
+            exit(1);
+        } else {
+            println!("Credentials saved: {}", &credentials_file.display());
+            exit(0);
+        }
     }
 
-    #[test]
-    fn test_hostname() {
-        let hostname = Command::new("hostname")
-            .output()
-            .map(|output| String::from_utf8_lossy(&output.stdout).trim().to_string())
-            .unwrap_or_else(|_| "unknown".to_string());
-        
-        // Since hostname might vary, just ensure it's not empty
-        assert!(!hostname.is_empty());
-    }
-
-    #[test]
-    fn test_execution_path() {
-        let execution_path = env::current_exe()
-            .map(|path| path.display().to_string())
-            .unwrap_or_else(|_| "unknown".to_string());
-
-        // Ensure execution path is not "unknown" when it's expected to resolve
-        assert!(execution_path != "unknown");
-    }
-
-    #[test]
-    fn test_working_directory() {
-        let working_directory = env::current_dir()
-            .map(|path| path.display().to_string())
-            .unwrap_or_else(|_| "unknown".to_string());
-        
-        // Ensure the working directory is a valid path
-        assert!(working_directory != "unknown");
+    if !written {
+        warn!("No credentials were written.");
+        exit(1);
     }
 }
