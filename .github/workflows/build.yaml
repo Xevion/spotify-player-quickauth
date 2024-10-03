@@ -78,56 +78,35 @@ jobs:
       - name: Run tests
         run: cargo test --verbose
 
-      - name: Export Package Version
-        run: echo "PACKAGE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
+      - name: Export Release Version
+        run: echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
         shell: sh
      
-      - name: Package Artifacts
-        shell: bash
-        run: |
-          src=$(pwd)
-          stage=
-          case $RUNNER_OS in
-              Linux)
-                  stage=$(mktemp -d)
-                  ;;
-              macOS)
-                  stage=$(mktemp -d -t tmp)
-                  ;;
-          esac
-          
-          RELEASE_VERSION=v${{ env.PACKAGE_VERSION }}
-          ARCHIVE="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}"
-          
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            ARCHIVE="$ARCHIVE.zip"
-            cp target/${{ matrix.target }}/release/spotify-player-quickauth.exe ./
-            tar czf "$ARCHIVE" ./spotify-player-quickauth.exe
-          else
-            ARCHIVE="$ARCHIVE.tar.gz"
-            cp target/${{ matrix.target }}/release/spotify-player-quickauth ./
-            tar czf "$ARCHIVE" ./spotify-player-quickauth
-          fi
+      - name: Archive
+        if: ${{ !contains(matrix.os, 'windows') }}
+        uses: TheDoctor0/zip-release@0.7.6
+        with:
+          type: tar
+          filename: spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.tar.gz
+          directory: target/${{ matrix.target }}/release/
+          path: |
+            spotify-player-quickauth
 
-          echo "ARCHIVE_PATH=$(pwd)/$ARCHIVE" >> $GITHUB_ENV
-
-      - name: List all files
-        shell: bash
-        run: find "$(dirname "${{ env.ARCHIVE_PATH }}")" -type f
-
-      - name: Verify Archive
-        shell: bash
-        run: |
-          if [ ! -f "${{ env.ARCHIVE_PATH }}" ]; then
-            echo "Error: Archive file not found!"
-            exit 1
-          fi
+      - name: Archive
+        if: ${{ contains(matrix.os, 'windows') }}
+        uses: TheDoctor0/zip-release@0.7.6
+        with:
+          type: zip
+          filename: spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.zip
+          directory: target/${{ matrix.target }}/release/
+          path: |
+            spotify-player-quickauth.exe
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ./*.{zip,tar.gz}
+          files: spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.*
           generate_release_notes: true
           fail_on_unmatched_files: true
 
