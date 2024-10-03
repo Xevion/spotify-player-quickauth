@@ -4,7 +4,11 @@ use std::process::Command;
 fn main() {
     let os = env::consts::OS;
     let arch = env::consts::ARCH;
-    let username = env::var("USER").unwrap_or_else(|_| "unknown".to_string());
+    let username = if os == "windows" {
+        env::var("USERNAME").unwrap_or_else(|_| "unknown".to_string())
+    } else {
+        env::var("USER").unwrap_or_else(|_| "unknown".to_string())
+    };
     let hostname = Command::new("hostname")
         .output()
         .map(|output| String::from_utf8_lossy(&output.stdout).trim().to_string())
