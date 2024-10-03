@@ -10,6 +10,10 @@ on:
         description: 'Fail fast strategy'
         required: false
         default: 'true'
+      verbose:
+        description: 'Verbose output'
+        required: false
+        default: 'false'
   push:
     tags: 
       - 'v*.*.*'
@@ -74,10 +78,10 @@ jobs:
           cat .cargo/config.github.toml >> .cargo/config.toml
 
       - name: Build
-        run: cargo build --verbose  --release --target ${{ matrix.target }}
+        run: cargo build ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release --target ${{ matrix.target }}
 
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --target ${{ matrix.target }}
 
       - name: Export Release Version
         run: echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
