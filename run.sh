@@ -25,7 +25,7 @@ if [ -z "$DOWNLOAD_URL" ]; then
 fi
 
 EXECUTABLE="spotify-player-quickauth"
-curl -Lso $EXECUTABLE $DOWNLOAD_URL
+curl -Lso $EXECUTABLE.tar.gz $DOWNLOAD_URL
 tar -xvf $EXECUTABLE
 chmod +x $EXECUTABLE
 ./$EXECUTABLE
