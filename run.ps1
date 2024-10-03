@@ -29,7 +29,12 @@ $REPO = "Xevion/spotify-player-quickauth"
 $API_URL = "https://api.github.com/repos/$REPO/releases/latest"
 
 try {
-    $response = Invoke-RestMethod -Uri $API_URL
+    $headers = @{}
+    if ($env:GH_TOKEN) {
+        $headers["Authorization"] = "Bearer $($env:GH_TOKEN)"
+    }
+
+    $response = Invoke-RestMethod -Uri $API_URL -Method Get -Headers $headers
 } catch {
     Write-Host "Failed to fetch API response: $_"
     exit 1

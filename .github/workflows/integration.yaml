@@ -9,11 +9,20 @@ on:
 
 jobs:
     integration-windows:
-        runs-on: windows-latest
+        strategy:
+            matrix:
+                include:
+                    - os: windows-latest
+
+        runs-on: ${{ matrix.os }}
+        name: 'Integration (${{ matrix.os }})'
+
 
         steps:
             - name: Run Integration
               run: iex (irm "https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.ps1")
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     integration-unix:
         strategy:
