@@ -127,7 +127,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ${{ env.ARCHIVE_PATH }}
+          files: |
+            ./*.zip
+            ./*.tar.gz
           generate_release_notes: true
           fail_on_unmatched_files: true
 
