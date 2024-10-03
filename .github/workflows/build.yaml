@@ -4,7 +4,12 @@ permissions:
   contents: write
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+    inputs:
+      fail_fast:
+        description: 'Fail fast strategy'
+        required: false
+        default: 'true'
   push:
     tags: 
       - 'v*.*.*'
@@ -26,7 +31,8 @@ env:
 jobs:
   build:
     strategy:
-      fail-fast: ${{ startsWith(github.ref, 'refs/tags/') }}
+      fail-fast: ${{ startsWith(github.ref, 'refs/tags/') || github.event.inputs.fail_fast == 'true' }}
+      
       matrix:
         include:
           - os: ubuntu-latest
@@ -93,10 +99,10 @@ jobs:
           RELEASE_VERSION=v${{ env.PACKAGE_VERSION }}
           ARCHIVE="spotify-player-quickauth-$RELEASE_VERSION-${{ matrix.target }}"
           
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            ARCHIVE="$ARCHIVE.zip"
+            if [[ "$RUNNER_OS" == "Windows" ]]; then
+            ARCHIVE="$ARCHIVE.tar.gz"
             cp target/${{ matrix.target }}/release/spotify-player-quickauth.exe ./
-            zip -r "$ARCHIVE" ./spotify-player-quickauth.exe
+            tar czf "$ARCHIVE" ./spotify-player-quickauth.exe
           else
             ARCHIVE="$ARCHIVE.tar.gz"
             cp target/${{ matrix.target }}/release/spotify-player-quickauth ./
