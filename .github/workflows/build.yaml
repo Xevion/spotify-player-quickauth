@@ -106,6 +106,15 @@ jobs:
           directory: target/${{ matrix.target }}/release/
           path: |
             spotify-player-quickauth.exe
+      
+      - name: Upload Artifact
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}
+          if-no-files-found: error
+          retention-days: 7
+          path: target/${{ matrix.target }}/release/spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.*
 
       - name: Release
         uses: softprops/action-gh-release@v2
