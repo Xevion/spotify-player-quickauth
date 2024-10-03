@@ -3,7 +3,6 @@ $ErrorActionPreference = "Stop"
 $osPlatform = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
 $architecture = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
 
-# Adjust the platform and architecture for the API call
 $platform = switch -Wildcard ($osPlatform) {
     "*Windows*" { "win32" }
     "*Linux*"   { "linux" }
@@ -20,24 +19,47 @@ $arch = switch ($architecture) {
 }
 
 if ($platform -ne "win32") {
-    Write-Host "It looks like you are not on a Windows platform. Please use the native SH script option for your platform."
+    Write-Host "Non-Windows platform detected. Please use the native SH script for your platform."
     exit 1
 }
 
-
 $target = "x86_64-pc-windows-msvc"
 
-# Fetch the latest release download URL
 $REPO = "Xevion/spotify-player-quickauth"
 $API_URL = "https://api.github.com/repos/$REPO/releases/latest"
-$DOWNLOAD_URL = (Invoke-RestMethod -Uri $API_URL).assets | Where-Object { $_.browser_download_url -match $target } | Select-Object -ExpandProperty browser_download_url
 
-if (-not $DOWNLOAD_URL) {
-	Write-Host "No release could be found for the current platform"
-	exit 1
+try {
+    $response = Invoke-RestMethod -Uri $API_URL
+} catch {
+    Write-Host "Failed to fetch API response: $_"
+    exit 1
 }
 
+$DOWNLOAD_URL = $response.assets | Where-Object { $_.browser_download_url -match $target } | Select-Object -ExpandProperty browser_download_url
+
+if (-not $DOWNLOAD_URL) {
+    Write-Host "No release found for the current platform"
+    exit 1
+}
+
+$EXECUTABLE_ZIP = Join-Path (Get-Location) "spotify-player-quickauth.zip"
 $EXECUTABLE = "spotify-player-quickauth.exe"
-Invoke-WebRequest -Uri $DOWNLOAD_URL -OutFile $EXECUTABLE
-Start-Process -FilePath $EXECUTABLE -Wait
-Remove-Item $EXECUTABLE
+
+Invoke-RestMethod -Uri $DOWNLOAD_URL -OutFile $EXECUTABLE_ZIP
+
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+if (Test-Path $EXECUTABLE) {
+    Remove-Item $EXECUTABLE -ErrorAction SilentlyContinue
+}
+
+[System.IO.Compression.ZipFile]::ExtractToDirectory($EXECUTABLE_ZIP, (Get-Location).Path)
+
+try {
+    & .\$EXECUTABLE
+} catch {
+    Write-Host "Failed to start executable: $_"
+} finally {
+    Remove-Item $EXECUTABLE_ZIP -ErrorAction SilentlyContinue
+    Remove-Item $EXECUTABLE -ErrorAction SilentlyContinue
+}
