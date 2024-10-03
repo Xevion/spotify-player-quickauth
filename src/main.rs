@@ -72,3 +72,11 @@ async fn main() {
         exit(1);
     }
 }
+
+
+mod tests {
+    #[test]
+    fn test_nothing() {
+        assert_eq!(1, 1);
+    }
+}
