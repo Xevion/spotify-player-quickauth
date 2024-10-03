@@ -14,6 +14,7 @@ jobs:
                 include:
                     - os: windows-latest
 
+        permissions: {}
         runs-on: ${{ matrix.os }}
         name: 'Integration (${{ matrix.os }})'
 
@@ -29,6 +30,7 @@ jobs:
             matrix:
                 os: [ubuntu-latest, macos-latest, macos-13]
 
+        permissions: {}
         runs-on: ${{ matrix.os }}
         name: 'Integration (${{ matrix.os }})'
 
