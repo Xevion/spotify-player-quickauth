@@ -6,8 +6,16 @@ A simple CLI-based application for creating a `credentials.json` file, used by t
 
 You can install this applicaiton, but most people will just need it once.
 
+For Linux and macOS, you can paste this command into your terminal:
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.sh | sh
+```
+
+For Windows, you can paste this command into PowerShell:
+
+```powershell
+iex (irm "https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.ps1")
 ```
 
 ## Building from Source
