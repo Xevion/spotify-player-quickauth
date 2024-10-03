@@ -99,7 +99,7 @@ jobs:
             zip -r "$ARCHIVE" ./spotify-player-quickauth.exe
           else
             ARCHIVE="$ARCHIVE.tar.gz"
-            cp target/${{ matrix.target }}/release/spotify-player-quickauth.exe ./
+            cp target/${{ matrix.target }}/release/spotify-player-quickauth ./
             tar czf "$ARCHIVE" ./spotify-player-quickauth
           fi
 
