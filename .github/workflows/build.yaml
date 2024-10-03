@@ -112,6 +112,7 @@ jobs:
           echo "ARCHIVE_PATH=$(pwd)/$ARCHIVE" >> $GITHUB_ENV
 
       - name: Verify Archive
+        shell: bash
         run: |
           if [ ! -f "${{ env.ARCHIVE_PATH }}" ]; then
             echo "Error: Archive file not found!"
