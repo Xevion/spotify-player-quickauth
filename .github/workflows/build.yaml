@@ -106,9 +106,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.*
+          files: |
+            spotify-player-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.*
           generate_release_notes: true
-          fail_on_unmatched_files: true
 
       # Publish flow
       # - name: cargo login
