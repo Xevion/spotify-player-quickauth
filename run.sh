@@ -26,7 +26,8 @@ fi
 
 EXECUTABLE="spotify-player-quickauth"
 curl -Lso $EXECUTABLE.tar.gz $DOWNLOAD_URL
-tar -xvf $EXECUTABLE
+tar -xvf $EXECUTABLE.tar.gz $EXECUTABLE
 chmod +x $EXECUTABLE
 ./$EXECUTABLE
 rm $EXECUTABLE
+rm $EXECUTABLE.tar.gz
