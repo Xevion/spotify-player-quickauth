@@ -112,7 +112,8 @@ jobs:
           echo "ARCHIVE_PATH=$(pwd)/$ARCHIVE" >> $GITHUB_ENV
 
       - name: List all files
-        run: find "${{ env.ARCHIVE_PATH }}/../" -type f
+        shell: bash
+        run: find "$(dirname "${{ env.ARCHIVE_PATH }}")" -type f
 
       - name: Verify Archive
         shell: bash
