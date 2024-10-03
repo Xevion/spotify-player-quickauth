@@ -8,17 +8,19 @@ on:
             - completed
 
 jobs:
-    integration:
+    integration-windows:
+        runs-on: windows-latest
+
+        steps:
+            - name: Run Integration
+              run: iex (irm "https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.ps1")
+
+    integration-unix:
         strategy:
             matrix:
-                os: [ubuntu-latest, macos-latest, windows-latest]
+                os: [ubuntu-latest, macos-latest]
         runs-on: ${{ matrix.os }}
 
         steps:
             - name: Run Integration
-              if: ${{ !contains(matrix.os, 'windows') }}
               run: curl -sSL https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.sh | sh
-            
-            - name: Run Integration (Windows)
-              if: ${{ contains(matrix.os, 'windows') }}
-              run: iex (irm "https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.ps1")
