@@ -18,7 +18,7 @@ fi
 REPO="Xevion/spotify-player-quickauth"
 API_URL="https://api.github.com/repos/$REPO/releases/latest"
 if [ -n "$GH_TOKEN" ]; then
-	API_URL="$API_URL --header 'Authorization: Bearer $GH_TOKEN'"
+	API_URL="$API_URL -H 'Authorization: Bearer $GH_TOKEN'"
 fi
 DOWNLOAD_URL=$(curl -s $API_URL  | grep "browser_download_url" | grep $target | cut -d '"' -f 4)
 

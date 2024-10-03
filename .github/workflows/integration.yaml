@@ -1,4 +1,4 @@
-name: Integration Test
+name: Integration
 
 on:
     workflow_dispatch: 
@@ -6,8 +6,6 @@ on:
         workflows: ["Build"]
         types:
             - completed
-env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
     integration-windows:
@@ -28,3 +26,5 @@ jobs:
         steps:
             - name: Run Integration
               run: curl -sSL https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.sh | sh
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
