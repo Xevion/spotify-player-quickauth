@@ -14,9 +14,6 @@ jobs:
         runs-on: ${{ matrix.os }}
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
-
             - name: Run Integration
               if: ${{ !contains(matrix.os, 'windows') }}
               run: curl -sSL https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.sh | sh
