@@ -22,6 +22,9 @@ iex (irm "https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs
 
 Don't want to run my funky shell script? No problem! You can build the application from source easily.
 
+- You'll need `cargo`, the Rust build system and package manager. It's included with the Rust toolchain, which you can install from [rustup.rs][rustup]
+- This is an early project, so the minimum supported version of Rust is not known. I'm developing on 1.81.0 though.
+
 ```bash
 git clone https://github.com/Xevion/spotify-player-quickauth.git
 cd spotify-player-quickauth
@@ -30,3 +33,5 @@ cargo build --release
 ```
 
 [spotify-player]: https://github.com/aome510/spotify-player
+[rustup]: https://rustup.rs
+[git]: https://git-scm.com
