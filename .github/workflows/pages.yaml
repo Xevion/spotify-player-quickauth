@@ -1,0 +1,32 @@
+name: GitHub Pages
+
+permissions:
+    pages: write
+    id-token: write
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - run.sh
+      - run.ps1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare
+        run: |
+            mkdir -p ./site
+            cp ./run.ps1 ./site
+            cp ./run.sh ./site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Deploy
+        uses: actions/deploy-pages@v4
