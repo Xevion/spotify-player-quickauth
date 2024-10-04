@@ -100,7 +100,7 @@ jobs:
         run: cargo build ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release --target ${{ matrix.target }}
 
       - name: Run tests
-        if: matrix.test != 'false'
+        if: matrix.test
         shell: bash
         run: |
           if [ "${{ matrix.test }}" = "native" ]; then
