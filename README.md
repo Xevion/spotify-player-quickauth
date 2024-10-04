@@ -9,7 +9,7 @@ You can install this application, but most people will just need it once. The fo
 For Linux and macOS, you can paste this command into your terminal:
 
 ```bash
-curl -sSL https://xevion.github.io/spotify-quickauth/run.sh | sh
+curl -sSL https://xevion.github.io/spotify-quickauth/run.sh | sh -s --
 ```
 
 For Windows, you can paste this command into PowerShell:

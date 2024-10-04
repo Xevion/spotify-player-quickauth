@@ -29,8 +29,8 @@ fi
 
 EXECUTABLE="spotify-quickauth"
 curl -Lso $EXECUTABLE.tar.gz $DOWNLOAD_URL
-tar -xvf $EXECUTABLE.tar.gz $EXECUTABLE
+tar -xvf $EXECUTABLE.tar.gz $EXECUTABLE 1>/dev/null
 rm $EXECUTABLE.tar.gz
 chmod +x $EXECUTABLE
 trap "rm -f $EXECUTABLE" INT EXIT
-./$EXECUTABLE
+./$EXECUTABLE $@
