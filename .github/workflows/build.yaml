@@ -101,6 +101,7 @@ jobs:
 
       - name: Run tests
         if: matrix.test != 'false'
+        shell: bash
         run: |
           if [ "${{ matrix.test }}" = "native" ]; then
             cargo test ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release
