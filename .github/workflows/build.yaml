@@ -42,20 +42,28 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             tools: musl-tools
+            # This will run against GNU target, not MUSL
+            test: native
           - os: ubuntu-latest
             target: aarch64-unknown-linux-musl
             tools: gcc-aarch64-linux-gnu
+            test: false
           - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             tools: gcc-arm-linux-gnueabihf
-          - os: macos-latest
+            test: false
+          - os: macos-13
             target: x86_64-apple-darwin
+            test: true
           - os: macos-latest
             target: aarch64-apple-darwin
+            test: true
           - os: windows-latest
             target: x86_64-pc-windows-msvc
+            test: true
           - os: windows-latest
             target: aarch64-pc-windows-msvc
+            test: false
 
     runs-on: ${{ matrix.os }}
     name: release-${{ matrix.target }}
@@ -92,7 +100,13 @@ jobs:
         run: cargo build ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release --target ${{ matrix.target }}
 
       - name: Run tests
-        run: cargo test ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --target ${{ matrix.target }}
+        if: matrix.test != 'false'
+        run: |
+          if [ "${{ matrix.test }}" = "native" ]; then
+            cargo test ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release
+          else
+            cargo test ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release --target ${{ matrix.target }}
+          fi
 
       - name: Export Release Version
         run: echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
