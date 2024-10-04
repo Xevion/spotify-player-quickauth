@@ -1,8 +1,12 @@
 # spotify-quickauth
 
+[![Build Status](https://github.com/Xevion/spotify-quickauth/workflows/Build/badge.svg)](https://github.com/Xevion/spotify-quickauth/actions)
+[![Crates.io](https://img.shields.io/crates/v/spotify-quickauth.svg)](https://crates.io/crates/spotify-quickauth)
+
+
 A simple CLI-based application for creating a `credentials.json` file, used by `librespot` derived applications, such as [spotify-player][spotify-player], [spotifyd][spotifyd], and [raspotify][raspotify].
 
-- One command, no compilation, all platforms (Windows, Linux, MacOS), ARM included.
+- One command, no compilation, all platforms (Windows, Linux, MacOS), ARM included
 - Automatically places configuration files
 - No dependencies, no installation, no fuss
 
@@ -49,6 +53,15 @@ Installation is not necessary to use this application, but if you're having trou
 
 Binaries are always available for download from the [releases page][releases], and they're the same ones used by the shell scripts above.
 
+Currently, the following targets are available for download:
+- x64 Linux (MUSL) `x86_64-unknown-linux-musl`
+- ARM64 Linux (MUSL) `aarch64-unknown-linux-musl`
+- ARMv7 Linux `armv7-unknown-linux-musleabihf`
+- Intel MacOS `x86_64-apple-darwin`
+- Apple Silicon MacOS `aarch64-apple-darwin`
+- x64 Windows `x86_64-pc-windows-msvc`
+- ARM64 Windows `aarch64-pc-windows-msvc`
+
 If you'd like to use the shell script above to install the binary, you can use the `-S` or `--stop` flag to prevent the script from running the binary after downloading it. It implicitly applies the `--keep` flag too.
 
 ```bash
@@ -71,8 +84,6 @@ cd spotify-quickauth
 cargo install --path .
 spotify-quickauth --help
 ```
-
-To install the binary
 
 [spotify-player]: https://github.com/aome510/spotify-player
 [spotifyd]: https://github.com/Spotifyd/spotifyd
