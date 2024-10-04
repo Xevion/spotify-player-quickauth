@@ -15,7 +15,7 @@ else
 fi
 
 # Fetch the latest release download URL
-REPO="Xevion/spotify-player-quickauth"
+REPO="Xevion/spotify-quickauth"
 API_URL="https://api.github.com/repos/$REPO/releases/latest"
 if [ -n "$GH_TOKEN" ]; then
 	API_URL="$API_URL -H 'Authorization: Bearer $GH_TOKEN'"
@@ -27,7 +27,7 @@ if [ -z "$DOWNLOAD_URL" ]; then
 	exit 1
 fi
 
-EXECUTABLE="spotify-player-quickauth"
+EXECUTABLE="spotify-quickauth"
 curl -Lso $EXECUTABLE.tar.gz $DOWNLOAD_URL
 tar -xvf $EXECUTABLE.tar.gz $EXECUTABLE
 rm $EXECUTABLE.tar.gz

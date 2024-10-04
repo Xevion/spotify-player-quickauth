@@ -25,7 +25,7 @@ if ($platform -ne "win32") {
 
 $target = "x86_64-pc-windows-msvc"
 
-$REPO = "Xevion/spotify-player-quickauth"
+$REPO = "Xevion/spotify-quickauth"
 $API_URL = "https://api.github.com/repos/$REPO/releases/latest"
 
 try {
@@ -47,8 +47,8 @@ if (-not $DOWNLOAD_URL) {
     exit 1
 }
 
-$EXECUTABLE_ZIP = Join-Path (Get-Location) "spotify-player-quickauth.zip"
-$EXECUTABLE = "spotify-player-quickauth.exe"
+$EXECUTABLE_ZIP = Join-Path (Get-Location) "spotify-quickauth.zip"
+$EXECUTABLE = "spotify-quickauth.exe"
 
 Invoke-RestMethod -Uri $DOWNLOAD_URL -OutFile $EXECUTABLE_ZIP
 

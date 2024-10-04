@@ -1,4 +1,4 @@
-# spotify-player-quickauth
+# spotify-quickauth
 
 A simple CLI-based application for creating a `credentials.json` file, used by the [spotify-player][spotify-player] library, for authenticating with the Spotify API.
 
@@ -9,13 +9,13 @@ You can install this application, but most people will just need it once. The fo
 For Linux and macOS, you can paste this command into your terminal:
 
 ```bash
-curl -sSL https://xevion.github.io/spotify-player-quickauth/run.sh | sh
+curl -sSL https://xevion.github.io/spotify-quickauth/run.sh | sh
 ```
 
 For Windows, you can paste this command into PowerShell:
 
 ```powershell
-iex (irm "https://xevion.github.io/spotify-player-quickauth/run.ps1")
+iex (irm "https://xevion.github.io/spotify-quickauth/run.ps1")
 ```
 
 ## Building from Source
@@ -26,10 +26,10 @@ Don't want to run my funky shell script? No problem! You can build the applicati
 - This is an early project, so the minimum supported version of Rust is not known. I'm developing on 1.81.0 though.
 
 ```bash
-git clone https://github.com/Xevion/spotify-player-quickauth.git
-cd spotify-player-quickauth
+git clone https://github.com/Xevion/spotify-quickauth.git
+cd spotify-quickauth
 cargo build --release
-./target/release/spotify-player-quickauth
+./target/release/spotify-quickauth
 ```
 
 [spotify-player]: https://github.com/aome510/spotify-player

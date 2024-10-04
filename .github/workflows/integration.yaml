@@ -21,7 +21,7 @@ jobs:
 
         steps:
             - name: Run Integration
-              run: iex (irm "https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.ps1")
+              run: iex (irm "https://raw.githubusercontent.com/Xevion/spotify-quickauth/refs/heads/master/run.ps1")
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,6 +36,6 @@ jobs:
 
         steps:
             - name: Run Integration
-              run: curl -sSL https://raw.githubusercontent.com/Xevion/spotify-player-quickauth/refs/heads/master/run.sh | sh
+              run: curl -sSL https://raw.githubusercontent.com/Xevion/spotify-quickauth/refs/heads/master/run.sh | sh
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
