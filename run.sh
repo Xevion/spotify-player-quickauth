@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -e
 
 if [ "$OS" = "Windows_NT" ]; then
 	target="x86_64-pc-windows-msvc"
@@ -30,7 +30,7 @@ fi
 EXECUTABLE="spotify-player-quickauth"
 curl -Lso $EXECUTABLE.tar.gz $DOWNLOAD_URL
 tar -xvf $EXECUTABLE.tar.gz $EXECUTABLE
-chmod +x $EXECUTABLE
-./$EXECUTABLE
-rm $EXECUTABLE
 rm $EXECUTABLE.tar.gz
+chmod +x $EXECUTABLE
+trap "rm -f $EXECUTABLE" INT EXIT
+./$EXECUTABLE
