@@ -12,7 +12,7 @@ readme = "CARGO_README.md"
 
 [package.metadata.binstall.signing]
 algorithm = "minisign"
-pubkey = "RWR4y+tYx6jem6tVD60RsR/P8fNm+KBT0b4wxTY0a4L/8cN3R85KXyPi"
+pubkey = "RWSPQt0a5mbpICWV2Ft8iKOPv1F5xvknUeoZo38sKGUxOKbJmHUZE6UC"
 
 [dependencies]
 librespot-discovery = {  version = "0.4.2" }
