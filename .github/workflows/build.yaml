@@ -163,7 +163,7 @@ jobs:
           rsign sign -W -s minisign.key -x "${{ env.ARCHIVE_PATH }}.sig" -t "$comment" "${{ env.ARCHIVE_PATH }}"
       
       - name: Upload Artifact
-        if: !env.IS_RELEASE
+        if: ${{ !env.IS_RELEASE }}
         uses: actions/upload-artifact@v4
         with:
           name: spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}
