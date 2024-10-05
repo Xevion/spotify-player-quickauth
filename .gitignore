@@ -1,4 +1,5 @@
 /target
+*.key
 *.tar.gz
 *.zip
 credentials.json
