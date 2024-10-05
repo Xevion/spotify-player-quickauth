@@ -34,6 +34,7 @@ env:
 
 jobs:
   build:
+    environment: production
     strategy:
       fail-fast: ${{ startsWith(github.ref, 'refs/tags/') || github.event.inputs.fail_fast == 'true' }}
       
@@ -140,6 +141,23 @@ jobs:
           path: |
             spotify-quickauth.exe
       
+      - name: Install rsign2
+        uses: taiki-e/install-action@v2
+        with:
+          tool: rsign2
+      
+      - name: Sign Archive
+        env:
+          ARCHIVE_PATH: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
+        run: |
+          echo "{{ secrets.MINISIGN_KEY }}" > minisign.key
+          
+          ts=$(node -e 'console.log((new Date).toISOString())')
+          git=$(git rev-parse HEAD)
+          comment="gh=$GITHUB_REPOSITORY git=$git ts=$ts run=$GITHUB_RUN_ID"
+          
+          rsign sign -W -s minisign.key -x "${{ env.ARCHIVE_PATH }}.sig" -t "$comment" "${{ env.ARCHIVE_PATH }}"
+      
       - name: Upload Artifact
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         uses: actions/upload-artifact@v4
@@ -155,6 +173,7 @@ jobs:
         with:
           files: |
             ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
+            ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}.sig
           generate_release_notes: true
 
       - name: cargo login
