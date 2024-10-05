@@ -119,7 +119,6 @@ jobs:
             echo "ARCHIVE=spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.tar.gz" >> $GITHUB_ENV
           fi
           echo "ARCHIVE_DIR=target/${{ matrix.target }}/release" >> $GITHUB_ENV
-          echo "IS_RELEASE=${{startsWith(github.ref, 'refs/tags/')}}" >> $GITHUB_ENV
      
       - name: Archive
         if: ${{ !contains(matrix.os, 'windows') }}
@@ -142,19 +141,20 @@ jobs:
             spotify-quickauth.exe
       
       - name: Install rsign2
-        if: env.IS_RELEASE
+        if: startsWith(github.ref, 'refs/tags/')
         uses: taiki-e/install-action@v2
         with:
           tool: rsign2
       
       - name: Sign Archive
-        if: env.IS_RELEASE
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           MINISIGN_KEY: ${{ secrets.MINISIGN_KEY }}
           ARCHIVE_PATH: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
         shell: bash
         run: |
-          echo "::debug:: length = $(echo -n "$MINISIGN_KEY" | wc -c)"
+          echo "::notice:: length = $(echo -n $MINISIGN_KEY | wc -c)"
+          echo "::notice:: length = $(echo -n "$MINISIGN_KEY" | wc -c)"
           echo "$MINISIGN_KEY" > minisign.key
           
           ts=$(node -e 'console.log((new Date).toISOString())')
@@ -164,7 +164,7 @@ jobs:
           rsign sign -W -s minisign.key -x "${{ env.ARCHIVE_PATH }}.sig" -t "$comment" "${{ env.ARCHIVE_PATH }}"
       
       - name: Upload Artifact
-        if: ${{ !env.IS_RELEASE }}
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         uses: actions/upload-artifact@v4
         with:
           name: spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}
@@ -174,7 +174,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: env.IS_RELEASE
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
@@ -182,9 +182,9 @@ jobs:
           generate_release_notes: true
 
       - name: cargo login
-        if: env.IS_RELEASE
+        if: startsWith(github.ref, 'refs/tags/')
         run: cargo login ${{ secrets.CRATES_IO_API_TOKEN }}
       
       - name: "cargo release publish"
-        if: env.IS_RELEASE
+        if: startsWith(github.ref, 'refs/tags/')
         run: cargo release publish --workspace --all-features --allow-branch HEAD --no-confirm --no-verify --execute
