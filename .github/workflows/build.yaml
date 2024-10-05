@@ -34,7 +34,6 @@ env:
 
 jobs:
   build:
-    environment: production
     strategy:
       fail-fast: ${{ startsWith(github.ref, 'refs/tags/') || github.event.inputs.fail_fast == 'true' }}
       
