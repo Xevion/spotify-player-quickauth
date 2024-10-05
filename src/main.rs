@@ -5,7 +5,6 @@ use librespot_core::config::DeviceType;
 use librespot_discovery::Discovery;
 use log::{info, warn};
 use sha1::{Digest, Sha1};
-use librespot_core::SessionConfig;
 use std::io::Write;
 
 #[tokio::main(flavor = "current_thread")]
@@ -42,7 +41,7 @@ async fn main() {
     let device_id = hex::encode(Sha1::digest(device_name.as_bytes()));
     let device_type = DeviceType::Computer;
 
-    let mut server = Discovery::builder(device_id, SessionConfig::default().client_id)
+    let mut server = Discovery::builder(device_id)
         .name(device_name.clone())
         .device_type(device_type)
         .launch()
@@ -52,7 +51,7 @@ async fn main() {
 
     let mut written = false;
     while let Some(credentials) = server.next().await {
-        let result = File::create(&credentials_file).and_then(|mut file| {
+        let result = File::create("./credentials.json").and_then(|mut file| {
             let data = serde_json::to_string(&credentials)?;
             write!(file, "{data}")
         });
