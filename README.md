@@ -1,7 +1,7 @@
 # spotify-quickauth
 
 [![Build Status](https://github.com/Xevion/spotify-quickauth/workflows/Build/badge.svg)](https://github.com/Xevion/spotify-quickauth/actions)
-[![Crates.io](https://img.shields.io/crates/v/spotify-quickauth.svg)](https://crates.io/crates/spotify-quickauth)
+<!-- [![Crates.io](https://img.shields.io/crates/v/spotify-quickauth.svg)](https://crates.io/crates/spotify-quickauth) -->
 
 
 A simple CLI-based application for creating a `credentials.json` file, used by `librespot` derived applications, such as [spotify-player][spotify-player], [spotifyd][spotifyd], and [raspotify][raspotify].
@@ -37,9 +37,9 @@ iex (irm "https://xevion.github.io/spotify-quickauth/run.ps1")
 This application is dead simple to use. Just run the command, and it'll tell you to connect to a fake 'device' in your Spotify interface.
 
 >[!NOTE]
-> You must be connected to the same network running `spotify-quickauth`, as the `zeroconf` technology does not work across networks nor proxies. 
+> You must be connected to the same network running `spotify-quickauth`, as the `zeroconf` technology **does not work** across **networks** nor **proxies**. 
 
-Once you connect, the credentials file will be created, and you'll be prompted to select which location(s) to place it in.
+Once you connect, the credentials file will be created, and you'll be prompted to select which location(s) to place it in. Even if none of the relevant `librespot` applications are detected or installed, you can specify manual locations, or the current working directory.
 
 ## Installation
 
@@ -62,14 +62,14 @@ Currently, the following targets are available for download:
 - x64 Windows `x86_64-pc-windows-msvc`
 - ARM64 Windows `aarch64-pc-windows-msvc`
 
-If you'd like to use the shell script above to install the binary, you can use the `-S` or `--stop` flag to prevent the script from running the binary after downloading it. It implicitly applies the `--keep` flag too.
+If you'd like to use the shell script above to install the binary, you can use the `-S/--stop` flag to prevent the script from running the binary after downloading it. It implicitly applies the `--keep` flag too.
 
 ```bash
 curl -sSL https://xevion.github.io/spotify-quickauth/run.sh | sh -s -- -S
 mv spotify-quickauth /usr/local/bin
 ```
 
-You can also install the binary with [`cargo binstall`][binstall] or [`cargo quickinstall`][quickinstall], assuming you have them installed.
+Then you can move it to whatever location you'd like. Make sure that directory is in your $PATH though!
 
 ### Building from Source
 
@@ -84,6 +84,10 @@ cd spotify-quickauth
 cargo install --path .
 spotify-quickauth --help
 ```
+
+If you have any troubles building the project
+- Make sure you're using a target that's supported by the project (see above).
+- Certain targets may require specfic linkers. For example, 
 
 [spotify-player]: https://github.com/aome510/spotify-player
 [spotifyd]: https://github.com/Spotifyd/spotifyd
