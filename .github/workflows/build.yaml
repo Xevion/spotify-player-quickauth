@@ -109,8 +109,15 @@ jobs:
             cargo test ${{ github.event.inputs.verbose == 'true' && '--verbose' || '' }} --release --target ${{ matrix.target }}
           fi
 
-      - name: Export Release Version
-        run: echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
+      - name: Prepare Variables
+        run: |
+          echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
+          if ${{ contains(matrix.os, 'windows') }}; then
+            echo "ARCHIVE=spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.zip" >> $GITHUB_ENV
+          else
+            echo "ARCHIVE=spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.tar.gz" >> $GITHUB_ENV
+          fi
+          echo "ARCHIVE_DIR=target/${{ matrix.target }}/release" >> $GITHUB_ENV
         shell: sh
      
       - name: Archive
@@ -118,8 +125,8 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.6
         with:
           type: tar
-          filename: spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.tar.gz
-          directory: target/${{ matrix.target }}/release/
+          filename: ${{ env.ARCHIVE }}
+          directory: ${{ env.ARCHIVE_DIR }}/
           path: |
             spotify-quickauth
 
@@ -128,8 +135,8 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.6
         with:
           type: zip
-          filename: spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.zip
-          directory: target/${{ matrix.target }}/release/
+          filename: ${{ env.ARCHIVE }}
+          directory: ${{ env.ARCHIVE_DIR }}/
           path: |
             spotify-quickauth.exe
       
@@ -140,14 +147,14 @@ jobs:
           name: spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}
           if-no-files-found: error
           retention-days: 7
-          path: target/${{ matrix.target }}/release/spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.*
+          path: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            target/${{ matrix.target }}/release/spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.*
+            ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
           generate_release_notes: true
 
       # Publish flow
