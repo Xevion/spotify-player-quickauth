@@ -10,7 +10,6 @@ A simple CLI-based application for creating a `credentials.json` file, used by `
 - Automatically places configuration files
 - No dependencies, no installation, no fuss
 
->[!WARNING]
 >This README is literally filled with lies. I'm not joking, I've just typed up a bunch of features I plan to implement, and am planning them out now. A fair amount of it works, but most of the specific options aren't currently implemented. I'm working on it, I promise!
 
 ## Quickstart
@@ -23,7 +22,6 @@ curl -sSL https://xevion.github.io/spotify-quickauth/run.sh | sh -s --
 
 The default invocation is likely fine for most users, it will try to understand the available paths for `credentials.json` to be written to, and allow you to select them.
 
->[!NOTE]
 > Automatic detection is dependent on the related software being installed and/or relevant configuration files being present.
 
 For **Windows**, you can paste this command into PowerShell:
@@ -36,7 +34,6 @@ iex (irm "https://xevion.github.io/spotify-quickauth/run.ps1")
 
 This application is dead simple to use. Just run the command, and it'll tell you to connect to a fake 'device' in your Spotify interface.
 
->[!NOTE]
 > You must be connected to the same network running `spotify-quickauth`, as the `zeroconf` technology **does not work** across **networks** nor **proxies**. 
 
 Once you connect, the credentials file will be created, and you'll be prompted to select which location(s) to place it in. Even if none of the relevant `librespot` applications are detected or installed, you can specify manual locations, or the current working directory.
@@ -45,7 +42,6 @@ Once you connect, the credentials file will be created, and you'll be prompted t
 
 Installation is not necessary to use this application, but if you're having trouble, want to compile it yourself, or are using it frequently, you might want to install it.
 
->[!NOTE]
 >The scripts above can be given the `-K` or `--keep` flag to keep the downloaded binary. This will prevent repeated API calls to GitHub if you're using the script frequently within a short period.
 
 
