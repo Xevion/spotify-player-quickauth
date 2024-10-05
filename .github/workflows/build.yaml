@@ -154,6 +154,7 @@ jobs:
           ARCHIVE_PATH: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
         shell: bash
         run: |
+          echo "debug: length = $(echo -n {{ secrets.MINISIGN_KEY }} | wc -c)"
           echo "{{ secrets.MINISIGN_KEY }}" > minisign.key
           
           ts=$(node -e 'console.log((new Date).toISOString())')
