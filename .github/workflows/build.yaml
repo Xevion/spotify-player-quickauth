@@ -150,11 +150,12 @@ jobs:
       - name: Sign Archive
         if: env.IS_RELEASE
         env:
+          MINISIGN_KEY: ${{ secrets.MINISIGN_KEY }}
           ARCHIVE_PATH: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
         shell: bash
         run: |
-          echo "debug: length = $(echo -n {{ secrets.MINISIGN_KEY }} | wc -c)"
-          echo "{{ secrets.MINISIGN_KEY }}" > minisign.key
+          echo "::debug:: length = $(echo -n $MINISIGN_KEY | wc -c)"
+          echo $MINISIGN_KEY > minisign.key
           
           ts=$(node -e 'console.log((new Date).toISOString())')
           git=$(git rev-parse HEAD)
