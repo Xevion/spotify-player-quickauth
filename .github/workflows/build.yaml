@@ -119,6 +119,7 @@ jobs:
             echo "ARCHIVE=spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.tar.gz" >> $GITHUB_ENV
           fi
           echo "ARCHIVE_DIR=target/${{ matrix.target }}/release" >> $GITHUB_ENV
+          echo "IS_RELEASE=${{startsWith(github.ref, 'refs/tags/')}}" >> $GITHUB_ENV
         shell: sh
      
       - name: Archive
@@ -142,11 +143,13 @@ jobs:
             spotify-quickauth.exe
       
       - name: Install rsign2
+        if: env.IS_RELEASE
         uses: taiki-e/install-action@v2
         with:
           tool: rsign2
       
       - name: Sign Archive
+        if: env.IS_RELEASE
         env:
           ARCHIVE_PATH: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
         run: |
@@ -159,7 +162,7 @@ jobs:
           rsign sign -W -s minisign.key -x "${{ env.ARCHIVE_PATH }}.sig" -t "$comment" "${{ env.ARCHIVE_PATH }}"
       
       - name: Upload Artifact
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        if: !env.IS_RELEASE
         uses: actions/upload-artifact@v4
         with:
           name: spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}
@@ -169,7 +172,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+        if: env.IS_RELEASE
         with:
           files: |
             ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
@@ -177,9 +180,9 @@ jobs:
           generate_release_notes: true
 
       - name: cargo login
-        if: startsWith(github.ref, 'refs/tags/')
+        if: env.IS_RELEASE
         run: cargo login ${{ secrets.CRATES_IO_API_TOKEN }}
       
       - name: "cargo release publish"
-        if: startsWith(github.ref, 'refs/tags/')
+        if: env.IS_RELEASE
         run: cargo release publish --workspace --all-features --allow-branch HEAD --no-confirm --no-verify --execute
