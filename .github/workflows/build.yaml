@@ -111,6 +111,7 @@ jobs:
           fi
 
       - name: Prepare Variables
+        shell: bash
         run: |
           echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
           if ${{ contains(matrix.os, 'windows') }}; then
@@ -120,7 +121,6 @@ jobs:
           fi
           echo "ARCHIVE_DIR=target/${{ matrix.target }}/release" >> $GITHUB_ENV
           echo "IS_RELEASE=${{startsWith(github.ref, 'refs/tags/')}}" >> $GITHUB_ENV
-        shell: sh
      
       - name: Archive
         if: ${{ !contains(matrix.os, 'windows') }}
@@ -152,6 +152,7 @@ jobs:
         if: env.IS_RELEASE
         env:
           ARCHIVE_PATH: ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}
+        shell: bash
         run: |
           echo "{{ secrets.MINISIGN_KEY }}" > minisign.key
           
