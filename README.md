@@ -51,7 +51,7 @@ Installation is not necessary to use this application, but if you're having trou
 
 ### Pre-built Binaries
 
-Binaries are always available for download from the [releases page][releases], and they're the same ones used by the shell scripts above.
+Binaries are always available for download from the [releases page][latestRelease], and they're the same ones used by the shell scripts above.
 
 Currently, the following targets are available for download:
 - x64 Linux (MUSL) `x86_64-unknown-linux-musl`
@@ -62,14 +62,34 @@ Currently, the following targets are available for download:
 - x64 Windows `x86_64-pc-windows-msvc`
 - ARM64 Windows `aarch64-pc-windows-msvc`
 
+Please [file an issue][new-issue] if you are on a platform that is not supported, or if you encounter issues with the binaries.
+
+### Via `cargo-binstall`
+
+>[!NOTE]
+> If the package cannot be found for your target or fails to be downloaded for any reason, `cargo-binstall` will automatically fall back to building the package from source.
+
+`cargo-binstall` is a tool that allows you to install binaries from crates.io without needing to compile them yourself.
+
+```
+cargo binstall spotify-quickauth
+```
+
+If you're curious where the binary comes from, `cargo-binstall` will likely pull the binary directly from the [latest release][latestRelease] by this repository, selecting the most appropriate target for your host.
+
+
+### Manual Installation
+
 If you'd like to use the shell script above to install the binary, you can use the `-S/--stop` flag to prevent the script from running the binary after downloading it. It implicitly applies the `--keep` flag too.
+
+You'll need to move the binary yourself though:
 
 ```bash
 curl -sSL https://xevion.github.io/spotify-quickauth/run.sh | sh -s -- -S
 mv spotify-quickauth /usr/local/bin
 ```
 
-Then you can move it to whatever location you'd like. Make sure that directory is in your $PATH though!
+Make sure your directory of choice is in your $PATH though!
 
 ### Building from Source
 
@@ -89,6 +109,7 @@ If you have any troubles building the project
 - Make sure you're using a target that's supported by the project (see above).
 - Certain targets may require specfic linkers. For example, 
 
+[latestRelease]: https://github.com/Xevion/spotify-quickauth/releases/latest/
 [spotify-player]: https://github.com/aome510/spotify-player
 [spotifyd]: https://github.com/Spotifyd/spotifyd
 [raspotify]: https://github.com/dtcooper/raspotify
@@ -96,3 +117,5 @@ If you have any troubles building the project
 [git]: https://git-scm.com
 [binstall]: https://github.com/cargo-bins/cargo-binstall
 [quickinstall]: https://github.com/cargo-bins/cargo-quickinstall
+[binstall-installation]: https://github.com/cargo-bins/cargo-binstall#installation
+[new-issue]: https://github.com/Xevion/spotify-quickauth/issues/new
