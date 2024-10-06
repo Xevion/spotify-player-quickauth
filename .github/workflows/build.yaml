@@ -112,13 +112,19 @@ jobs:
       - name: Prepare Variables
         shell: bash
         run: |
-          echo "RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_ENV
+          RELEASE_VERSION=$(grep '^version = ' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')
+          ARCHIVE=spotify-quickauth-v$RELEASE_VERSION-${{ matrix.target }}
           if ${{ contains(matrix.os, 'windows') }}; then
-            echo "ARCHIVE=spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.zip" >> $GITHUB_ENV
+              ARCHIVE=$ARCHIVE.zip
           else
-            echo "ARCHIVE=spotify-quickauth-v${{ env.RELEASE_VERSION }}-${{ matrix.target }}.tar.gz" >> $GITHUB_ENV
+              ARCHIVE=$ARCHIVE.tar.gz
           fi
-          echo "ARCHIVE_DIR=target/${{ matrix.target }}/release" >> $GITHUB_ENV
+          ARCHIVE_DIR=target/${{ matrix.target }}/release
+            
+          # Export variables
+          echo "ARCHIVE_DIR=$ARCHIVE_DIR" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "ARCHIVE=$ARCHIVE" >> $GITHUB_ENV
      
       - name: Archive
         if: ${{ !contains(matrix.os, 'windows') }}
