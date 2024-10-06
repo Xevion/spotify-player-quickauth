@@ -181,10 +181,9 @@ jobs:
             ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}.sig
           generate_release_notes: true
 
-      - name: cargo login
-        if: startsWith(github.ref, 'refs/tags/')
+      - if: startsWith(github.ref, 'refs/tags/')
         run: cargo login ${{ secrets.CRATES_IO_API_TOKEN }}
       
-      - name: "cargo release publish"
+      - name: "Publish"
         if: startsWith(github.ref, 'refs/tags/')
-        run: cargo release publish --workspace --all-features --allow-branch HEAD --no-confirm --no-verify --execute
+        run: cargo publish --locked
