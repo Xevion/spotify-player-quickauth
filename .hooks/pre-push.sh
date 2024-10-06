@@ -41,7 +41,7 @@
 files='Cargo.toml'
 
 # Regexp use to decide if a git tag is a version label
-version_tag_regexp='^v?[0-9]{1,4}\.[0-9]{1,4}(\.[0-9]{1,4})?'
+version_tag_regexp='^[0-9]{1,4}\.[0-9]{1,4}(\.[0-9]{1,4})?'
 
 # Create a string of '0' chars of appropriate length for the current git version
 zero="$(git hash-object --stdin </dev/null | tr '[0-9a-f]' '0')"
