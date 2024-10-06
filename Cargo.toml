@@ -1,6 +1,6 @@
 [package]
 name = "spotify-quickauth"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "Quickly authenticate librespot-based applications with Spotify"
 rust-version = "1.81"
@@ -11,7 +11,8 @@ license = "MIT OR Apache-2.0"
 readme = "CARGO_README.md"
 
 [package.metadata.binstall]
-pkg-url = "{ repo }/releases/download/v{ version }/spotify-quickauth-v{ version }-{ target }-{ archive-suffix }"
+pkg-url = "{ repo }/releases/download/v{ version }/spotify-quickauth-v{ version }-{ target }{ archive-suffix }"
+pkg-format = "tgz"
 
 [package.metadata.binstall.signing]
 algorithm = "minisign"
