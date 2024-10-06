@@ -10,9 +10,18 @@ repository = "https://github.com/Xevion/spotify-quickauth"
 license = "MIT OR Apache-2.0"
 readme = "CARGO_README.md"
 
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/spotify-quickauth-v{ version }-{ target }-{ archive-suffix }"
+
 [package.metadata.binstall.signing]
 algorithm = "minisign"
 pubkey = "RWSPQt0a5mbpICWV2Ft8iKOPv1F5xvknUeoZo38sKGUxOKbJmHUZE6UC"
+
+[package.metadata.binstall.overrides.x86_64-pc-windows-msvc]
+pkg-fmt = "zip"
+
+[package.metadata.binstall.overrides.aarch64-pc-windows-msvc]
+pkg-fmt = "zip"
 
 [dependencies]
 librespot-discovery = {  version = "0.4.2" }
