@@ -181,9 +181,9 @@ jobs:
             ${{ env.ARCHIVE_DIR }}/${{ env.ARCHIVE }}.sig
           generate_release_notes: true
 
-      - if: startsWith(github.ref, 'refs/tags/')
+      - if: ${{ startsWith(github.ref, 'refs/tags/') && matrix.target == 'x86_64-unknown-linux-musl' }}
         run: cargo login ${{ secrets.CRATES_IO_API_TOKEN }}
       
       - name: "Publish"
-        if: startsWith(github.ref, 'refs/tags/')
-        run: cargo publish --locked
+        if: ${{ startsWith(github.ref, 'refs/tags/') && matrix.target == 'x86_64-unknown-linux-musl' }}
+        run: cargo publish --locked --allow-dirty
