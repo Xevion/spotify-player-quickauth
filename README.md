@@ -1,7 +1,11 @@
 # spotify-quickauth
 
 [![Build Status](https://github.com/Xevion/spotify-quickauth/workflows/Build/badge.svg)](https://github.com/Xevion/spotify-quickauth/actions)
+<!-- TODO: Add testing status badge -->
 [![Crates.io](https://img.shields.io/crates/v/spotify-quickauth.svg)](https://crates.io/crates/spotify-quickauth)
+![Crates.io MSRV](https://img.shields.io/crates/msrv/spotify-quickauth)
+![GitHub last commit](https://img.shields.io/github/last-commit/Xevion/spotify-quickauth)
+
 
 
 A simple CLI-based application for creating a `credentials.json` file, used by `librespot` derived applications, such as [spotify-player][spotify-player], [spotifyd][spotifyd], and [raspotify][raspotify].
