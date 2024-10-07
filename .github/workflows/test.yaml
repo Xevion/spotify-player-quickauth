@@ -2,11 +2,6 @@ name: test
 
 on:
   workflow_dispatch:
-    inputs:
-      fail_fast:
-        description: 'Fail fast strategy'
-        required: false
-        default: 'true'
   push:
     paths-ignore:
       - README.md
@@ -26,7 +21,7 @@ env:
 jobs:
   build:
     strategy:
-      fail-fast: ${{ github.event.inputs.fail_fast || 'true' }}
+      fail-fast: true
       
       matrix:
         include:

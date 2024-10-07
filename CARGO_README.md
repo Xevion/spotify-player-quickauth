@@ -1,6 +1,7 @@
 # spotify-quickauth
 
-[![Build Status](https://github.com/Xevion/spotify-quickauth/workflows/Build/badge.svg)](https://github.com/Xevion/spotify-quickauth/actions)
+[![Build Status](https://github.com/Xevion/spotify-quickauth/workflows/build/badge.svg)](https://github.com/Xevion/spotify-quickauth/actions)
+[![Testing Status](https://github.com/Xevion/spotify-quickauth/workflows/test/badge.svg)](https://github.com/Xevion/spotify-quickauth/actions)
 [![Crates.io](https://img.shields.io/crates/v/spotify-quickauth.svg)](https://crates.io/crates/spotify-quickauth)
 ![Crates.io MSRV](https://img.shields.io/crates/msrv/spotify-quickauth)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Xevion/spotify-quickauth)
