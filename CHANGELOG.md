@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased v0.2.0]
+
+- Adjusted `github-linguist` statistics, ignoring `.hooks`
+- Widened `paths-ignore` for `build` and `test` workflows.
+- Removed `paths-ignore` for `build` workflow on `push` trigger.
+
 ## v0.1.6
 
 - Began tracking changes in the `CHANGELOG.md` file.
