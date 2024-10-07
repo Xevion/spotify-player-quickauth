@@ -26,13 +26,14 @@ env:
 jobs:
   build:
     strategy:
-      fail-fast: ${{ github.event.inputs.fail_fast }}
+      fail-fast: ${{ github.event.inputs.fail_fast || 'true' }}
       
       matrix:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             tools: musl-tools
+            artifact: true
           - os: macos-13
             target: x86_64-apple-darwin
         #   - os: macos-latest
@@ -75,3 +76,14 @@ jobs:
 
       - name: Run tests
         run: cargo test --verbose --target ${{ matrix.target }}
+    
+      - name: Build
+        if: matrix.artifact
+        run: cargo build --verbose --target ${{ matrix.target }}
+
+      - name: Upload Artifact
+        if: matrix.artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotify-quickauth-${{ github.sha }}-${{ matrix.target }}
+          path: target/${{ matrix.target }}/debug/spotify-quickauth
