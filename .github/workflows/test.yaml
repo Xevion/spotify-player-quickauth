@@ -26,7 +26,7 @@ env:
 jobs:
   build:
     strategy:
-      fail-fast: ${{ github.event.inputs.fail_fast == 'true' }}
+      fail-fast: ${{ github.event.inputs.fail_fast }}
       
       matrix:
         include:
@@ -41,7 +41,7 @@ jobs:
             target: x86_64-pc-windows-msvc
 
     runs-on: ${{ matrix.os }}
-    name: test-$${{ matrix.os }}-${{ matrix.target }}
+    name: test-${{ matrix.os }}-${{ matrix.target }}
 
     steps:
       - uses: actions/checkout@v4
