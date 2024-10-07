@@ -4,16 +4,28 @@ on:
   workflow_dispatch:
   push:
     paths-ignore:
+      - .hooks/**
+      - CARGO_README.md
       - README.md
+      - CHANGELOG.md
+      - INTEGRATION.md
       - .gitignore
-      - LICENSE
+      - .gitattributes
+      - LICENSE*
       - run.sh
+      - run.ps1
   pull_request:
     paths-ignore:
+      - .hooks/**
+      - CARGO_README.md
       - README.md
+      - CHANGELOG.md
+      - INTEGRATION.md
       - .gitignore
-      - LICENSE
+      - .gitattributes
+      - LICENSE*
       - run.sh
+      - run.ps1
   schedule:
     - cron: '30 14 * * 1'  # every Monday, 9:30 AM CDT
 

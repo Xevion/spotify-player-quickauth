@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       fail_fast:
-        description: 'Fail fast strategy'
+        description: 'Use fail-fast strategy'
         required: false
         default: 'true'
       verbose:
@@ -17,17 +17,19 @@ on:
   push:
     tags: 
       - 'v*.*.*'
-    paths-ignore:
-      - README.md
-      - .gitignore
-      - LICENSE
-      - run.sh
+    # We don't filter by paths here, because we filter by tags, which means we're releasing. All releases should be built.
   pull_request:
     paths-ignore:
+      - .hooks/**
+      - CARGO_README.md
       - README.md
+      - CHANGELOG.md
+      - INTEGRATION.md
       - .gitignore
-      - LICENSE
+      - .gitattributes
+      - LICENSE*
       - run.sh
+      - run.ps1
 
 env:
   CARGO_TERM_COLOR: always
