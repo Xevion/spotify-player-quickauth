@@ -1,0 +1,77 @@
+name: test
+
+on:
+  workflow_dispatch:
+    inputs:
+      fail_fast:
+        description: 'Fail fast strategy'
+        required: false
+        default: 'true'
+  push:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - LICENSE
+      - run.sh
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - LICENSE
+      - run.sh
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    strategy:
+      fail-fast: ${{ github.event.inputs.fail_fast == 'true' }}
+      
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            tools: musl-tools
+          - os: macos-13
+            target: x86_64-apple-darwin
+        #   - os: macos-latest
+        #     target: aarch64-apple-darwin
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+
+    runs-on: ${{ matrix.os }}
+    name: test-$${{ matrix.os }}-${{ matrix.target }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.74
+          targets: ${{ matrix.target }}
+
+      - name: Install Linker Tools
+        if: matrix.tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install ${{ matrix.tools }}
+          # ensure has a newline at the end
+          [ "$(tail -c 1 .cargo/config.toml)" != "" ] && echo >> .cargo/config.toml
+          cat .cargo/config.github.toml >> .cargo/config.toml
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4.0.2
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git
+            target
+          key: testing-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            testing-${{ runner.os }}-${{ matrix.target }}-
+            testing-${{ runner.os }}-
+
+      - name: Run tests
+        run: cargo test --verbose --target ${{ matrix.target }}
