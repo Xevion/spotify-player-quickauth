@@ -14,6 +14,8 @@ on:
       - .gitignore
       - LICENSE
       - run.sh
+  schedule:
+    - cron: '30 14 * * 1'  # every Monday, 9:30 AM CDT
 
 env:
   CARGO_TERM_COLOR: always
