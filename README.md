@@ -13,9 +13,6 @@ A simple CLI-based application for creating a `credentials.json` file, used by `
 - Automatically places configuration files
 - No dependencies, no installation, no fuss
 
->[!WARNING]
->This README is literally filled with lies. I'm not joking, I've just typed up a bunch of features I plan to implement, and am planning them out now. A fair amount of it works, but most of the specific options aren't currently implemented. I'm working on it, I promise!
-
 ## Quickstart
 
 You can run this application without installing anything by using the following commands.
