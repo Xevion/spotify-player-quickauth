@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Remove all lines starting with >[! from CARGO_README.md
-sed -i '/^>\[!/d' CARGO_README.md
+# Remove markdown extension lines for Cargo publishing
+sed '/^>\[!/d' README.md > CARGO_README.md
 
 # Add the modified file to the commit
 git add CARGO_README.md
