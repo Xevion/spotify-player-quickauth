@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Adjusted `github-linguist` statistics, ignoring `.hooks`
 - Widened `paths-ignore` for `build` and `test` workflows.
 - Removed `paths-ignore` for `build` workflow on `push` trigger.
+- Switched release step token to use `secrets.GH_RELEASE_TOKEN`, so the author is bound to `Xevion` instead of `github-actions` (a bot).
 
 ## v0.1.6
 
